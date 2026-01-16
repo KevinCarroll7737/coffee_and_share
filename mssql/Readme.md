@@ -2,7 +2,7 @@ MSSQL Exploitation: Beyond `xp_cmdshell`
 ===
 
 ## Slides
-<img width="2560" height="1305" alt="image" href="https://github.com/KevinCarroll7737/coffee_and_share/blob/main/mssql/Readme.md" src="https://github.com/user-attachments/assets/b5b16964-183e-4ff6-a51c-7e98e656a723" />
+<img width="2560" height="1305" alt="image" href="https://github.com/KevinCarroll7737/coffee_and_share/blob/main/mssql/Readme.md](https://github.com/KevinCarroll7737/coffee_and_share/blob/main/mssql/slides.html" src="https://github.com/user-attachments/assets/b5b16964-183e-4ff6-a51c-7e98e656a723" />
 
 ## Testing Environement
 
