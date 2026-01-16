@@ -1,2 +1,2 @@
-MSSQL Beyond xp_cmdshell
+MSSQL Exploitation: Beyond `xp_cmdshell`
 ===
